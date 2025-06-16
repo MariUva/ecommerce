@@ -46,6 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             email = jwtUtil.extractUsername(token);
         }
+        System.out.println("📌 Filtro JWT: interceptando " + request.getMethod() + " " + request.getRequestURI());
 
         // Verifica que el usuario no esté ya autenticado
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {

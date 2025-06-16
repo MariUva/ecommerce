@@ -11,7 +11,15 @@
 
     <ng-container *ngIf="isLoggedIn">
       <a *ngIf="isAdmin" routerLink="/admin/products">Administrar productos</a>
-      <a *ngIf="isUser" routerLink="/perfil">Ir a mi perfil</a>
+
+      <ng-container *ngIf="isUser">
+        <a routerLink="/cart">
+          🛒 Carrito
+          <span *ngIf="cartCount > 0">({{ cartCount }})</span>
+        </a>
+        <a routerLink="/orders">Mis compras</a>
+      </ng-container>
+
       <a (click)="logout()" style="cursor: pointer;">Cerrar sesión</a>
     </ng-container>
   </div>

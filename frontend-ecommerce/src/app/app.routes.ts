@@ -23,4 +23,18 @@ export const appRoutes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'ADMIN' }
   },
+  {
+    path: 'cart',
+    loadComponent: () =>
+      import('./pages/cart/cart.component').then((m) => m.CartComponent),
+    canActivate: [RoleGuard],
+    data: { role: 'USER' },
+  },
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./pages/orders/orders.component').then((m) => m.OrdersComponent),
+    canActivate: [RoleGuard],
+    data: { role: 'USER' },
+  }
 ];

@@ -8,7 +8,7 @@
         <p class="desc">{{ product.descripcion }}</p>
         <p class="price">${{ product.precio | number:'1.0-0' }}</p>
         <p class="stock">Stock: {{ product.stock }}</p>
-        <button class="buy-btn">Añadir al carrito</button>
+        <button class="buy-btn" (click)="addToCart(product)">Añadir al carrito</button>
       </div>
     </div>
   </div>

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth/auth.service'; // ajusta si tu path es diferente
+import { AuthService } from '../../auth/auth.service';
+import { CartStateService } from '../../services/cart-state.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,17 @@ import { AuthService } from '../../auth/auth.service'; // ajusta si tu path es d
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  constructor(public auth: AuthService, private router: Router) {}
+  cartCount: number = 0;
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    private cartState: CartStateService
+  ) {
+    this.cartState.totalItems$.subscribe(count => {
+      this.cartCount = count;
+    });
+  }
 
   logout(): void {
     this.auth.logout();
