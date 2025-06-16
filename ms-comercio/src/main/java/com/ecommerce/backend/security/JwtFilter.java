@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -52,11 +53,12 @@ public class JwtFilter extends OncePerRequestFilter {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
             if (jwtUtil.validateToken(token)) {
+                var role = "ROLE_" + user.getRole().name();
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(
                                 user,
                                 null,
-                                List.of() // Puedes agregar roles aquí si los tienes
+                                List.of(new SimpleGrantedAuthority(role))
                         );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);

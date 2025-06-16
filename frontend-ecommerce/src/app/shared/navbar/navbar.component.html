@@ -1,0 +1,18 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/" class="logo">🛍️ Mi Tienda</a>
+  </div>
+
+  <div class="navbar-right">
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/login">Iniciar sesión</a>
+      <a routerLink="/register">Registrarse</a>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn">
+      <a *ngIf="isAdmin" routerLink="/admin/products">Administrar productos</a>
+      <a *ngIf="isUser" routerLink="/perfil">Ir a mi perfil</a>
+      <a (click)="logout()" style="cursor: pointer;">Cerrar sesión</a>
+    </ng-container>
+  </div>
+</nav>

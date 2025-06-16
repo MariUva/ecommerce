@@ -22,4 +22,9 @@ public class AuthController {
     public AuthResponse register(@RequestBody RegisterRequest request) {
         return authService.register(request);
     }
+
+    @PostMapping("/register/admin")
+    public AuthResponse registerAdmin(@RequestBody RegisterRequest request) {
+        return authService.registerAdmin(request);
+    }
 }

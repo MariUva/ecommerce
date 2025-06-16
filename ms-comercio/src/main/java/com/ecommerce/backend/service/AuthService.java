@@ -1,6 +1,7 @@
 package com.ecommerce.backend.service;
 
 import com.ecommerce.backend.dto.*;
+import com.ecommerce.backend.model.Role;
 import com.ecommerce.backend.model.User;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.security.JwtUtil;
@@ -31,7 +32,19 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         var user = User.builder()
                 .password(passwordEncoder.encode(request.password()))
-                .role("USER")
+                .role(Role.valueOf("USER"))
+                .email(request.email())
+                .build();
+
+        userRepo.save(user);
+        var token = jwtUtil.generateToken(user);
+        return new AuthResponse(token);
+    }
+
+    public AuthResponse registerAdmin(RegisterRequest request) {
+        var user = User.builder()
+                .password(passwordEncoder.encode(request.password()))
+                .role(Role.valueOf("ADMIN"))
                 .email(request.email())
                 .build();
 

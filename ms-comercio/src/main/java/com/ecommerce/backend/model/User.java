@@ -20,7 +20,9 @@ public class User implements UserDetails {
     private Long id;
 
     private String password;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(unique = true, nullable = false)
     private String email;
