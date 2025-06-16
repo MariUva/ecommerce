@@ -2,6 +2,7 @@ package com.ecommerce.backend.service;
 
 import com.ecommerce.backend.model.*;
 import com.ecommerce.backend.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public Order placeOrder(User user) {
         List<CartItem> cartItems = cartRepository.findByUser(user);
         if (cartItems.isEmpty()) throw new RuntimeException("Carrito vacío");
@@ -27,15 +29,8 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .build();
 
-        // Primero construimos los items sin calcular el total
         List<OrderItem> orderItems = cartItems.stream().map(item -> {
             Product product = item.getProduct();
-            if (product.getStock() < item.getQuantity()) {
-                throw new RuntimeException("Stock insuficiente para " + product.getNombre());
-            }
-
-            product.setStock(product.getStock() - item.getQuantity());
-            productRepository.save(product);
 
             BigDecimal itemPrice = product.getPrecio();
 
@@ -47,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
                     .build();
         }).toList();
 
-        // Calcular total de forma separada
         BigDecimal total = orderItems.stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -61,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<Order> getOrdersByUser(User user) {
         return orderRepository.findByUser(user);
     }

@@ -1,5 +1,6 @@
 package com.ecommerce.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,5 +24,6 @@ public class OrderItem {
     private BigDecimal price;
 
     @ManyToOne
+    @JsonIgnore
     private Order order;
 }
